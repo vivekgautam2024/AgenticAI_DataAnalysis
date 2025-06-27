@@ -108,65 +108,16 @@ with tab1:
                 with open('data_dictionary.json', 'w') as f:
                     json.dump(data_dictionary, f, indent=4)
                 st.success("Descriptions saved successfully!")
-                
+        else:
+            st.info("Select one or more files to analyze.")
     else:
-        st.info("No CSV files available. Please upload some files first.")
-
+        st.info("No CSV files available. Please upload files in the 'Upload CSV files' section.")
+        
 with tab2:
-    def on_submit_user_query():
-        user_query = st.session_state['user_input']
-        input_data_list = [
-            InputData(
-                variable_name=f"{file.split('.')[0]}", 
-                data_path=os.path.abspath(os.path.join("uploads", file)), 
-                data_description=data_dictionary.get(file, {}).get('description', '')
-            ) 
-            for file in selected_files
-        ]
-        st.session_state.visualisation_chatbot.user_sent_message(user_query, input_data=input_data_list)
-
-    if 'selected_files' in st.session_state and st.session_state['selected_files']:
-        if 'visualisation_chatbot' not in st.session_state:
-            st.session_state.visualisation_chatbot = PythonChatbot()
-        chat_container = st.container(height=500)
-        with chat_container:
-            # Display chat history with associated images
-            for msg_index, msg in enumerate(st.session_state.visualisation_chatbot.chat_history):
-                msg_col, img_col = st.columns([2, 1])
-                
-                with msg_col:
-                    if isinstance(msg, HumanMessage):
-                        st.chat_message("You").markdown(msg.content)
-                    elif isinstance(msg, AIMessage):
-                        with st.chat_message("AI"):
-                            st.markdown(msg.content)
-
-                    if isinstance(msg, AIMessage) and msg_index in st.session_state.visualisation_chatbot.output_image_paths:
-                        image_paths = st.session_state.visualisation_chatbot.output_image_paths[msg_index]
-                        for image_path in image_paths:
-                            with open(os.path.join("images/plotly_figures/pickle", image_path), "rb") as f:
-                                fig = pickle.load(f)
-                            st.plotly_chart(fig, use_container_width=True)
-        # Chat input
-        st.chat_input(placeholder="Ask me anything about your data", on_submit=on_submit_user_query, key='user_input')
-    else:
-        st.info("Please select files to analyze in the Data Management tab first.")
+    st.header("Chat Interface")
+    # Chat interface code goes here
+    st.write("Chat interface under construction.")
 
 with tab3:
-    if 'visualisation_chatbot' in st.session_state:
-        st.subheader("Intermediate Outputs")
-        for i, output in enumerate(st.session_state.visualisation_chatbot.intermediate_outputs):
-            with st.expander(f"Step {i+1}"):
-                if 'thought' in output:
-                    st.markdown("### Thought Process")
-                    st.markdown(output['thought'])
-                if 'code' in output:
-                    st.markdown("### Code")
-                    st.code(output['code'], language="python")
-                if 'output' in output:
-                    st.markdown("### Output")
-                    st.text(output['output'])
-                else:
-                    st.markdown("### Output")
-                    st.text(output)
-        st.info("No debug information available yet. Start a conversation to see intermediate outputs.")
+    st.header("Debug Information")
+    st.write("Debug info will be displayed here.")
