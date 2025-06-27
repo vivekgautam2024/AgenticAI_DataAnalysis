@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 import plotly.io as pio
 import plotly.express as px
 import pandas as pd
-import sklearn
+import scikit-learn
 
 
 repl = PythonREPL()
